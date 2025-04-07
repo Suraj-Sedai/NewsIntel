@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'newsintel',
-    'corsheaders', 'rest_framework', 'api',
+    'corsheaders', 'rest_framework',
 
 ]
 
