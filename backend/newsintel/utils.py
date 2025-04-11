@@ -17,7 +17,7 @@ def scrape_article(url):
     if response.status_code != 200:
         # If the response isn’t OK, return None.
         return None
-    soup = BeautifulSoup(response.content, 'html.parser')
+    soup = BeautifulSoup(response.content, 'html.parser')  
     
     # Example extraction: update these selectors to match the website you’re targeting.
     title_tag = soup.find('h1')
@@ -51,7 +51,7 @@ def clean_article_data(article):
         # Placeholders for later NLP processing such as sentiment, summarization, and topics.
         'sentiment': None,
         'summary': None,
-        'topics': [],
+        'topics': [], 
         'timestamp': timezone.now(),  # Record the current time as the article's ingestion time.
     }
     return cleaned_article
