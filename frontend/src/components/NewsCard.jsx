@@ -1,6 +1,8 @@
+"use client"
+
 import "./NewsCard.css"
 
-const NewsCard = ({ article }) => {
+const NewsCard = ({ article, onClick }) => {
   const { title, summary, source, timestamp, sentiment, image } = article
 
   // Determine sentiment class and icon
@@ -41,7 +43,7 @@ const NewsCard = ({ article }) => {
   }
 
   return (
-    <div className="news-card">
+    <div className="news-card" onClick={() => onClick(article)}>
       {/* Article image */}
       <div className="news-card-image">
         <img src={image || "https://via.placeholder.com/300x200"} alt={title} />

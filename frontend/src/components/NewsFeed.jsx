@@ -1,7 +1,9 @@
+"use client"
+
 import NewsCard from "./NewsCard"
 import "./NewsFeed.css"
 
-const NewsFeed = ({ articles, loading }) => {
+const NewsFeed = ({ articles, loading, onArticleClick }) => {
   // If loading, show skeleton loader
   if (loading) {
     return (
@@ -40,7 +42,7 @@ const NewsFeed = ({ articles, loading }) => {
     <div className="news-feed">
       <div className="news-feed-grid">
         {articles.map((article) => (
-          <NewsCard key={article.id} article={article} />
+          <NewsCard key={article.id} article={article} onClick={onArticleClick} />
         ))}
       </div>
     </div>
