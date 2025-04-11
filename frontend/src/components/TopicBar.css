@@ -1,0 +1,83 @@
+.topic-bar-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 1rem 0;
+    margin-bottom: 1.5rem;
+  }
+  
+  .topic-bar {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    padding: 0.5rem 0;
+    gap: 0.75rem;
+    flex: 1;
+  }
+  
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .topic-bar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .topic-button {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    border: 1px solid #e5e7eb;
+    background-color: transparent;
+    cursor: pointer;
+  }
+  
+  .topic-button:hover {
+    background-color: rgba(var(--topic-color, 59, 130, 246), 0.1);
+  }
+  
+  .topic-button.active {
+    background-color: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+  }
+  
+  .scroll-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    z-index: 10;
+    flex-shrink: 0;
+  }
+  
+  .scroll-button.left {
+    margin-right: 0.5rem;
+  }
+  
+  .scroll-button.right {
+    margin-left: 0.5rem;
+  }
+  
+  .scroll-button:hover {
+    background-color: #f3f4f6;
+  }
+  
+  @media (max-width: 640px) {
+    .topic-bar-container {
+      padding: 0.75rem 0;
+    }
+  
+    .topic-button {
+      padding: 0.375rem 0.75rem;
+      font-size: 0.875rem;
+    }
+  }
+  
