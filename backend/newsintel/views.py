@@ -1,51 +1,51 @@
-'''Develop API Views
-Decide whether to use function-based views or class-based views (or even ViewSets) with DRF. A common approach is to use ViewSets along with DRF’s routers for automatic URL routing.
-
-For example, create an ArticleViewSet that handles listing, retrieving, and updating article objects.
-
-Likewise, set up endpoints to update or retrieve user preferences.'''
-
-from rest_framework import viewsets
+# views.py
+from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import status
-from .models import Article, UserPreferences
-from .serializers import ArticleSerializer, UserPreferencesSerializer
-from django.contrib.auth.models import User
-from django.utils import timezone
-from datetime import datetime
+from .models import Article  # Your Article model should be defined in models.py
+from .serializers import ArticleSerializer  # Create this serializer to map Article objects to JSON
 
 class ArticleViewSet(viewsets.ModelViewSet):
-    queryset = Article.objects.all()
+    # Queryset defines which Article objects this view handles.
+    queryset = Article.objects.all().order_by('-timestamp')
+    # Serializer to convert Article model instances into JSON and vice versa.
     serializer_class = ArticleSerializer
+    # Only authenticated users can access these endpoints.
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         """
-        Create a new article.
+        Create a new article instance.
+        Validates the incoming JSON payload and, if correct, saves it.
         """
         serializer = self.get_serializer(data=request.data)
+        # Validate data: if there's a problem, an exception is raised automatically.
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+        # Return the created article data with a 201 (Created) response.
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
     def update(self, request, *args, **kwargs):
         """
-        Update an existing article.
+        Update an existing article. Supports full or partial updates.
         """
         partial = kwargs.pop('partial', False)
-        instance = self.get_object()
+        instance = self.get_object()  # Retrieve the current instance based on URL parameters.
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
+        # Return the updated article data.
         return Response(serializer.data, status=status.HTTP_200_OK)
+
     def destroy(self, request, *args, **kwargs):
         """
-
         Delete an article.
         """
         instance = self.get_object()
         self.perform_destroy(instance)
+        # Respond with HTTP 204 (No Content) as there is nothing to return.
         return Response(status=status.HTTP_204_NO_CONTENT)
+
     def list(self, request, *args, **kwargs):
         """
         List all articles.
@@ -53,4 +53,3 @@ class ArticleViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
