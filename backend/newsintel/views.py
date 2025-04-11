@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import Article  # Your Article model should be defined in models.py
 from .serializers import ArticleSerializer  # Create this serializer to map Article objects to JSON
+from rest_framework.decorators import action
 
 class ArticleViewSet(viewsets.ModelViewSet):
     # Queryset defines which Article objects this view handles.
@@ -53,3 +54,10 @@ class ArticleViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'], url_path='analyze')
+    def analyze(self, request):
+        # Add your analysis logic here.
+        # For example, you can perform some analysis on articles and return a summary:
+        analysis_result = {"message": "Article analysis executed successfully."}
+        return Response(analysis_result, status=status.HTTP_200_OK)
