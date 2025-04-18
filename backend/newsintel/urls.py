@@ -1,12 +1,11 @@
-from rest_framework import routers
-from newsintel.views import ArticleViewSet
-#import to include path
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import ArticleViewSet, UserPreferencesViewSet
 
-router = routers.DefaultRouter()
-router.register(r'articles', ArticleViewSet)
+router = DefaultRouter()
+router.register(r'articles', ArticleViewSet, basename='article')
+router.register(r'preferences', UserPreferencesViewSet, basename='preferences')
 
 urlpatterns = [
-    # ... other url patterns
     path('api/', include(router.urls)),
 ]

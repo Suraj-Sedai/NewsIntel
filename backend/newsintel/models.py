@@ -27,7 +27,11 @@ class Article(models.Model):
                    )
     # Choice B: normalized via Topic model
     # topics       = models.ManyToManyField(Topic, blank=True)
-
+    fetched_at = models.DateTimeField(
+            auto_now_add=True,
+            null=True,               # ← existing rows become NULL
+            blank=True,
+        )
     class Meta:
         ordering = ['-published_at']
         indexes = [

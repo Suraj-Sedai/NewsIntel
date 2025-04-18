@@ -27,7 +27,25 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+REST_FRAMEWORK = {
+    # Use JWT auth by default
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    # Require login for all API endpoints
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    # Pagination defaults
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+    # Enable filtering/searching
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ],
+}
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,6 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'newsintel',
     'corsheaders', 'rest_framework',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -52,8 +71,9 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True  # for dev, restrict in prod
-
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [

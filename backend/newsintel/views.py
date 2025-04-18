@@ -2,6 +2,7 @@ from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Article
 from .serializers import ArticleSerializer
+from rest_framework.permissions import IsAuthenticated
 
 class ArticleViewSet(viewsets.ModelViewSet):
     queryset = Article.objects.all()
