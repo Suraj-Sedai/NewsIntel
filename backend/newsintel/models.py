@@ -1,24 +1,58 @@
+from django.conf import settings
 from django.db import models
+from django.contrib.postgres.fields import ArrayField, JSONField  # PG-specific
 
-# Create your models here.
-class  Article(models.Model):
-    title = models.CharField(max_length=300)
-    source = models.CharField(max_length=100)
-    content = models.TextField()
-    sentiment = models.CharField(max_length=20)
-    summary = models.TextField()
-    topics = models.TextField()
-    timestamp = models.DateTimeField()
+class Topic(models.Model):
+    """If you’d rather have a full lookup table for topics."""
+    name = models.CharField(max_length=50, unique=True)
 
-'''b. User Preferences Model
-Associate user preferences with Django’s built-in User model. For example:
+    def __str__(self):
+        return self.name
 
-Preferred topics (Technology, Politics, Science, etc.).
+class Article(models.Model):
+    title         = models.CharField(max_length=300)
+    source        = models.CharField(max_length=100, db_index=True)
+    description   = models.TextField(blank=True)
+    content       = models.TextField(blank=True)
+    url           = models.URLField(unique=True)
+    published_at  = models.DateTimeField(db_index=True)  # when the article was actually published
+    fetched_at    = models.DateTimeField(auto_now_add=True)  # when you ingested it
+    sentiment     = models.FloatField(null=True, blank=True)     # optional
+    summary       = models.TextField(null=True, blank=True)      # optional
+    # Choice A: PG ArrayField
+    topics        = ArrayField(
+                       models.CharField(max_length=50),
+                       default=list,
+                       blank=True,
+                   )
+    # Choice B: normalized via Topic model
+    # topics       = models.ManyToManyField(Topic, blank=True)
 
-History of interacted or read articles (possibly using a many-to-many field).'''
+    class Meta:
+        ordering = ['-published_at']
+        indexes = [
+            models.Index(fields=['-published_at', 'source']),
+        ]
+
+    def __str__(self):
+        return f"{self.title} ({self.source})"
+
 
 class UserPreferences(models.Model):
-    user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
-    preferred_topics = models.TextField()
-    read_articles = models.ManyToManyField(Article, blank=True)
-    
+    user             = models.OneToOneField(
+                           settings.AUTH_USER_MODEL,
+                           on_delete=models.CASCADE,
+                       )
+    # Again, either PG Array or normalized M2M:
+    preferred_topics = ArrayField(
+                           models.CharField(max_length=50),
+                           default=list,
+                           blank=True,
+                       )
+    # preferred_topics = models.ManyToManyField(Topic, blank=True)
+
+    read_articles    = models.ManyToManyField(Article, blank=True)
+    updated_at       = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Prefs for {self.user.username}"
