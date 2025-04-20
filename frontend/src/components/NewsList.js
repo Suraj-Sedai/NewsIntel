@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react';
 import { fetchArticles } from '../services/newsService';
 import './NewsList.css';
+import { useContext, useEffect, useState } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
 
-const NewsList = () => {
+export default function NewsList() {
+  const { token } = useContext(AuthContext);
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
-    fetchArticles().then(setArticles);
-  }, []);
+    fetchArticles(token).then(setArticles);
+  }, [token]);
 
   return (
     <div className='top'>
@@ -30,4 +32,3 @@ const NewsList = () => {
   );
 };
 
-export default NewsList;
