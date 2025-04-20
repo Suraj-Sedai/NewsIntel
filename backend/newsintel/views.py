@@ -40,7 +40,6 @@ from django.urls import reverse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-
 @api_view(['GET'])
 def newsapi_articles(request):
     api_key = '15866422dea04a8b85fc0ae163cdca13'
