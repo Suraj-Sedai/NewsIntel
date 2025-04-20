@@ -10,7 +10,7 @@ const NewsList = () => {
   }, []);
 
   return (
-    <div>
+    <div className='top'>
       <h1 className="page-header">Top Headlines</h1>
       <div className="news-container">
         {articles.map((article, index) => (
