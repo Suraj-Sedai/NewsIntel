@@ -1,11 +1,19 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import ArticleViewSet, UserPreferencesViewSet
+from django.urls import path
+from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
-router = DefaultRouter()
-router.register(r'articles', ArticleViewSet, basename='article')
-router.register(r'preferences', UserPreferencesViewSet, basename='preferences')
+# ...
+app_name = 'news'
 
 urlpatterns = [
-    path('api/', include(router.urls)),
+    # path('', views.index, name='index'),
+    # path('article/<int:article_id>/', views.detail, name='detail'),
+    # path('search/', views.search, name='search'),
+    path('api/newsapi-articles/', views.newsapi_articles, name='newsapi_articles'),
+
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
