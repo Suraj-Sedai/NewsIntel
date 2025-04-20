@@ -5,7 +5,10 @@ body {
     background-color: #f5f7fa;
   }
   
- 
+  .top{
+    margin-top: 6rem;
+    position: absolute;
+  }
   /* Page Header */
   .page-header {
     text-align: center;

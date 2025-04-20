@@ -5,7 +5,7 @@ const Navbar = () => (
   <nav className="navbar">
     <div className="navbar-logo">
       {/* logo.png lives in public/, so path is absolute */}
-      <img src="/logo.png" alt="News Intel Logo" />
+      <a href='/'><img src="/logo.png" alt="News Intel Logo" /></a>
     </div>
     <ul className="navbar-links">
       <li><a href="/">Home</a></li>
