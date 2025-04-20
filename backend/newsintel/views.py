@@ -37,8 +37,16 @@ from django.urls import reverse
 #         context = {'error_message': error_message}
 #         return render(request, 'news/search.html', context)
 
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .models import Preference
+from .serializers import (
+    RegisterSerializer, UserSerializer,
+    PreferenceSerializer
+)
 
 @api_view(['GET'])
 def newsapi_articles(request):
@@ -60,3 +68,40 @@ def newsapi_articles(request):
     ]
     
     return Response(trimmed_articles)
+
+@api_view(['POST'])
+def register(request):
+    serializer = RegisterSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    user = serializer.save()
+    return Response(UserSerializer(user).data, status=201)
+
+class LoginView(TokenObtainPairView):
+    # returns { access: "...jwt...", refresh: "..." }
+    pass
+
+@api_view(['GET','PUT'])
+@permission_classes([IsAuthenticated])
+def preferences(request):
+    pref = Preference.objects.get(user=request.user)
+    if request.method == 'GET':
+        return Response(PreferenceSerializer(pref).data)
+    else:  # PUT to update
+        serializer = PreferenceSerializer(pref, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def personalized_news(request):
+    # pull categories
+    cats = Preference.objects.get(user=request.user).categories
+    # here use NewsAPI or your existing logic, but pass categories
+    # for simplicity, fetch top-headlines for each category
+    all_articles = []
+    for cat in cats:
+        # call NewsAPI with &category=cat ...
+        # extend all_articles
+        pass
+    return Response(all_articles)
