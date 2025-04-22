@@ -21,7 +21,7 @@ export default function App() {
     <Router>
       {token && <Navbar />}
 
-      <Routes>
+      <Routes> 
         <Route
           path="/"
           element={token
