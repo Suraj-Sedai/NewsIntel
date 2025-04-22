@@ -1,19 +1,31 @@
-import React from 'react';
+// src/components/Navbar.jsx
+import React, { useContext } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
-const Navbar = () => (
-  <nav className="navbar">
-    <div className="navbar-logo">
-      {/* logo.png lives in public/, so path is absolute */}
-      <a href='/'><img src="/logo.png" alt="News Intel Logo" /></a>
-    </div>
-    <ul className="navbar-links">
-      <li><a href="/">Home</a></li>
-      <li><a href="/search">Search</a></li>
-      <li><a href="/categories">Categories</a></li>
-      <li><a href="/about">About</a></li>
-    </ul>
-  </nav>
-);
+export default function Navbar() {
+  const { logout } = useContext(AuthContext);
+  const navigate        = useNavigate();
 
-export default Navbar;
+  const handleLogout = () => {
+    logout();              // clears token + state
+    navigate('/login');    // send you to login screen
+  };
+
+  return (
+    <nav className="navbar">
+      <div className="navbar-logo">
+        <img src="/logo.png" alt="News Intel Logo" />
+      </div>
+      <ul className="navbar-links">
+        {/* ... your other links ... */}
+        <li>
+          <button onClick={handleLogout} className="logout-btn">
+            Logout
+          </button>
+        </li>
+      </ul>
+    </nav>
+  );
+}

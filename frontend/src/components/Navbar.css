@@ -43,4 +43,15 @@
       color: #787373;
       transform: translateY(-2px);
     }
-  
+    .logout-btn {
+      background: transparent;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .logout-btn:hover {
+      color: #e0e0e0;
+    }
+    
